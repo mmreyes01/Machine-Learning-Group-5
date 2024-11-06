@@ -1,0 +1,46 @@
+
+import pandas as pd
+import numpy as np
+import pandas as pd
+from matplotlib import pyplot as plt
+import seaborn as sns
+raw_data = pd.read_csv("C:\\Users\\User\\OneDrive\\Desktop\\Math Machine Learning\\cleaned_soc_med.csv")
+raw_data
+
+print(raw_data.shape)
+
+raw_data.head()
+
+platform_counts = raw_data['Platform'].value_counts()
+print(platform_counts)
+
+print(platform_counts.plot(kind='bar'))
+for i, v in enumerate(platform_counts.values):
+    plt.text(i, v, str(v), ha='center', va='bottom')
+plt.show()
+
+colors = ['orange', 'green', 'blue', 'red']
+print(platform_counts.plot(kind='bar',color=colors))
+for i, v in enumerate(platform_counts.values):
+    plt.text(i, v, str(v), ha='center', va='bottom')
+plt.show()
+
+# Group the data by interaction type, sentiment and platform
+grouped_data = raw_data.groupby(['InteractionType','Sentiment','Platform']).size().unstack(fill_value=0)
+
+# create a stacked bar chart
+grouped_data.plot(kind='bar', stacked=True, figsize=(15,6))
+plt.xlabel('Sentiment')
+plt.ylabel('Number of Sentiment')
+plt.title('Interaction Type, Sentiment, and Platform Distribution')
+plt.xticks(rotation=45)
+plt.legend(title='Sentiment', bbox_to_anchor=(1.05, 1), loc='upper left')
+
+plt.show()
+
+# create a pie chart
+
+plt.pie(platform_counts.values, labels=platform_counts.index, autopct= '%1.1f%%', startangle=90)
+plt.axis('equal')
+plt.title('Customer Distribution by Platform')
+plt.show()
