@@ -1,0 +1,67 @@
+import numpy as np
+import pandas as pd
+from matplotlib import pyplot as plt
+import seaborn as sns
+
+raw_data = pd.read_csv("C:\\Users\\User\\OneDrive\\Desktop\\Math Machine Learning\\cleaned_soc_med.csv")
+raw_data
+print(raw_data.shape)
+raw_data.head()
+
+Platform_counts = raw_data['Platform'].value_counts()
+print(Platform_counts)
+
+print(Platform_counts.plot(kind='bar', color='lightcoral'))
+for i, v in enumerate(Platform_counts.values):
+    plt.text(i, v, str(v), ha='center', va='bottom')
+plt.show()
+
+plt.pie(Platform_counts.values, labels=platform_counts.index, autopct= '%1.1f%%', startangle=100)
+plt.axis('equal')
+plt.title('Customer Distribution by Platform')
+plt.show()
+
+Sentiment_counts = raw_data['Sentiment'].value_counts()
+print(Sentiment_counts)
+
+plt.figure(figsize=(10,5))
+
+# Bar with recolor
+ax= Sentiment_counts.plot(kind='bar',color=['skyblue', 'lightgreen', 'lightcoral', 'gold', 'lightgray'])
+plt.title('Customer Distribution By Sentiment')
+
+for i, v in enumerate(Sentiment_counts.values):
+    plt.text(i, v, str(v), ha='center', va='bottom')
+    
+ax.legend(title="Customer Sentiment", loc="upper left", bbox_to_anchor=(1.05, 1))
+
+plt.show()
+
+
+import pandas as pd
+from matplotlib import pyplot as plt
+
+Sentiment_counts = raw_data.groupby('Platform')['Sentiment'].value_counts().unstack()
+print(Sentiment_counts)
+
+# create scatter chart
+plt.figure(figsize=(10,5))
+plt.scatter(Sentiment_counts.index,Sentiment_counts['Positive'], label='Positive', color ='skyblue')
+plt.scatter(Sentiment_counts.index,Sentiment_counts['Neutral'], label='Neutral', color ='lightgreen')
+plt.scatter(Sentiment_counts.index,Sentiment_counts['Negative'], label='Negative', color ='lightcoral')
+plt.scatter(Sentiment_counts.index,Sentiment_counts['Very Positive'], label='Very Postive', color ='gold')
+plt.scatter(Sentiment_counts.index,Sentiment_counts['Very Negative'], label='Very Negative', color ='gray')
+
+# add value to the points
+
+for index, row in Sentiment_counts.iterrows():
+    for col in Sentiment_counts.columns:
+        plt.text(index, row [col], str(row[col]), ha='center', va='bottom')
+
+#Set title and labels
+plt.title('Sentiment Distribution by Platform')
+plt.xlabel('Platform')
+plt.ylabel('Number of Interactions', fontsize=8)
+plt.xticks(rotation=45)
+plt.legend()
+plt.show()
